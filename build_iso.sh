@@ -83,7 +83,11 @@ if [ -n "$extra_cfg" ]; then
     grub_cfg+=$'\n'"$extra_cfg"
 fi
 
-for dir in /work/EFI/* /work/iso-root/boot/grub2; do
+# Trailing slash: only descend into directories. The ESP may carry
+# plain files at the EFI/ root (e.g. a MOK certificate shipped for
+# Secure Boot enrollment), and "$dir/grub.cfg" would fail on those
+# with "Not a directory".
+for dir in /work/EFI/*/ /work/iso-root/boot/grub2; do
     echo "$grub_cfg" >"$dir/grub.cfg"
 done
 
